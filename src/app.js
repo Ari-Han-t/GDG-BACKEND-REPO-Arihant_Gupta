@@ -7,3 +7,6 @@ module.exports=app;
 
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
+
+const taskRoutes = require("./routes/task.routes");
+app.use("/tasks", taskRoutes);
