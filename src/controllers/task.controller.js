@@ -58,3 +58,24 @@ exports.updateTask = async (req, res) => {
     res.json(updatedTask);
   };
   
+  exports.deleteTask = async (req, res) => {
+    const taskId = parseInt(req.params.id);
+  
+    const task = await prisma.task.findFirst({
+      where: {
+        id: taskId,
+        userId: req.userId,
+      },
+    });
+  
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+  
+    await prisma.task.delete({
+      where: { id: taskId },
+    });
+  
+    res.json({ message: "Task deleted successfully" });
+  };
+  
