@@ -1,12 +1,18 @@
-const express = require('express');
-const app=express();
-app.get('/',(req,res)=>{
-    res.json({message:"Backend is running"});
+const express = require("express");
+
+const app = express();
+
+// ✅ THIS LINE IS CRITICAL
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.json({ message: "Backend is running" });
 });
-module.exports=app;
 
 const authRoutes = require("./routes/auth.routes");
-app.use("/auth", authRoutes);
-
 const taskRoutes = require("./routes/task.routes");
+
+app.use("/auth", authRoutes);
 app.use("/tasks", taskRoutes);
+
+module.exports = app;
