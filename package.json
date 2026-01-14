@@ -1,0 +1,21 @@
+{
+  "name": "gdg-backend-repo-arihant_gupta",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ari-Han-t/GDG-BACKEND-REPO-Arihant_Gupta.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Ari-Han-t/GDG-BACKEND-REPO-Arihant_Gupta/issues"
+  },
+  "homepage": "https://github.com/Ari-Han-t/GDG-BACKEND-REPO-Arihant_Gupta#readme"
+}
