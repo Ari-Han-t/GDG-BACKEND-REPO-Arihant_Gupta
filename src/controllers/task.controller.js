@@ -1,7 +1,8 @@
 const prisma = require("../config/prisma");
 
 exports.createTask = async (req, res) => {
-  const { title, description, priority, deadline } = req.body;
+  const { title, description, priority, deadline, recurrence } = req.body;
+
 
   if (!title || !priority || !deadline) {
     return res.status(400).json({ message: "Missing fields" });
@@ -86,7 +87,33 @@ exports.updateTask = async (req, res) => {
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }
-  
+    
+    if (
+      task.recurrence &&
+      status === "COMPLETED"
+    ) {
+      let nextDeadline = new Date(task.deadline);
+    
+      if (task.recurrence === "DAILY") {
+        nextDeadline.setDate(nextDeadline.getDate() + 1);
+      }
+    
+      if (task.recurrence === "WEEKLY") {
+        nextDeadline.setDate(nextDeadline.getDate() + 7);
+      }
+    
+      await prisma.task.create({
+        data: {
+          title: task.title,
+          description: task.description,
+          priority: task.priority,
+          deadline: nextDeadline,
+          recurrence: task.recurrence,
+          userId: req.userId,
+        },
+      });
+    }
+    
     const updatedTask = await prisma.task.update({
       where: { id: taskId },
       data: {
