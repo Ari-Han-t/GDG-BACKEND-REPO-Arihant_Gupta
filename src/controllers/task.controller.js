@@ -57,6 +57,17 @@ exports.getTasks = async (req, res) => {
     orderBy: { createdAt: "desc" },
   });
 
+  const now = new Date();
+  
+  const tasksWithOverdue = tasks.map(task => ({
+    ...task,
+    isOverdue:
+      task.status !== "COMPLETED" &&
+      task.deadline < now,
+  }));
+  
+  res.json(tasksWithOverdue);
+  
   res.json(tasks);
 };
 
