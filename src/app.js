@@ -1,8 +1,10 @@
+require("dotenv").config({
+  path: process.env.NODE_ENV === "test" ? ".env.test" : ".env",
+});
+
 const express = require("express");
 
 const app = express();
-
-// ✅ THIS LINE IS CRITICAL
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -13,9 +15,9 @@ const authRoutes = require("./routes/auth.routes");
 const taskRoutes = require("./routes/task.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 
-app.use("/auth", authRoutes);
-app.use("/tasks", taskRoutes);
-app.use("/dashboard", dashboardRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 module.exports = app;
 const errorHandler = require("./middleware/error.middleware");
