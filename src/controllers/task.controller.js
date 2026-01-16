@@ -136,3 +136,11 @@ exports.deleteTask = async (req, res) => {
   logger.info(`Task ${taskId} deleted by user ${req.userId}`);
   res.json({ message: "Task deleted successfully" });
 };
+
+exports.getAllTasksAdmin = async (req, res) => {
+  const tasks = await prisma.task.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+
+  res.json(tasks);
+};

@@ -1,4 +1,5 @@
 const prisma = require("../config/prisma");
+const logger = require("../utils/logger");
 
 exports.getOverview = async (req, res) => {
   const userId = req.userId;
@@ -120,6 +121,8 @@ const trend = await prisma.task.groupBy({
   },
   _count: true,
 });
+logger.info(`Dashboard accessed by user ${req.userId}`);
+
 
   res.json({
     totalTasks,

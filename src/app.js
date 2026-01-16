@@ -18,3 +18,5 @@ app.use("/tasks", taskRoutes);
 app.use("/dashboard", dashboardRoutes);
 
 module.exports = app;
+const errorHandler = require("./middleware/error.middleware");
+app.use(errorHandler);

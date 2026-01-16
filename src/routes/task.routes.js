@@ -15,3 +15,13 @@ router.put("/:id", auth, updateTask);
 router.delete("/:id", auth, deleteTask);
   
 module.exports = router;
+
+const allowRoles = require("../middleware/role.middleware");
+const { getAllTasksAdmin } = require("../controllers/task.controller");
+
+router.get(
+  "/admin/all",
+  auth,
+  allowRoles(["ADMIN"]),
+  getAllTasksAdmin
+);
