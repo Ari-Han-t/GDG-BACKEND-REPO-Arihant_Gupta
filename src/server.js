@@ -1,12 +1,13 @@
 const app = require("./app");
-const logger = require("./utils/logger");
+const http = require("http");
+const { initSocket } = require("./socket");
 
 const PORT = process.env.PORT || 5000;
 
-if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => {
-    logger.info(`Server running on port ${PORT}`);
-  });
-}
+const server = http.createServer(app);
 
-module.exports = app;
+initSocket(server);
+
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
