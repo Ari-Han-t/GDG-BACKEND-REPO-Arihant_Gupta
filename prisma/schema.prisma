@@ -8,27 +8,41 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   password  String
-  role      String   @default("USER") // USER | ADMIN
-  tasks     Task[]
+  role      Role      @default(USER)
+
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+
   createdAt DateTime @default(now())
 }
 
 
 
-model Task {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  priority    String
-  status      String   @default("PENDING")
-  deadline    DateTime
-  recurrence  String?  // "DAILY" | "WEEKLY" | null
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  content    String
+  senderId   Int
+  receiverId Int
+
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+  isEdited   Boolean  @default(false)
+  isDeleted  Boolean  @default(false)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
+
+
+enum Role {
+  USER
+  ADMIN
+}

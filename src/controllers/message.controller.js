@@ -34,7 +34,56 @@ exports.sendMessage = async (req, res) => {
     res.status(201).json(message);
   };
   
+  exports.editMessage = async (req, res) => {
+    const messageId = Number(req.params.id);
+    const { content } = req.body;
   
+    const message = await prisma.message.findUnique({
+      where: { id: messageId },
+    });
+  
+    if (!message || message.senderId !== req.userId) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
+  
+    if (message.isDeleted) {
+      return res.status(400).json({ message: "Cannot edit deleted message" });
+    }
+  
+    const updated = await prisma.message.update({
+      where: { id: messageId },
+      data: {
+        content,
+        isEdited: true,
+      },
+    });
+  
+    res.json(updated);
+  };
+  
+  exports.deleteMessage = async (req, res) => {
+    const messageId = Number(req.params.id);
+  
+    const message = await prisma.message.findUnique({
+      where: { id: messageId },
+    });
+  
+    if (!message || message.senderId !== req.userId) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
+  
+    const deleted = await prisma.message.update({
+      where: { id: messageId },
+      data: {
+        content: "This message was deleted",
+        isDeleted: true,
+      },
+    });
+  
+    res.json(deleted);
+  };
+  
+
   exports.getConversation = async (req, res) => {
     const otherUserId = Number(req.params.userId);
     const page = Number(req.query.page) || 1;
