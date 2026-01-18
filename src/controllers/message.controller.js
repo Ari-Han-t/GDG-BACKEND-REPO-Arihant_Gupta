@@ -1,5 +1,7 @@
 const prisma = require("../config/prisma");
 const logger = require("../utils/logger");
+const { getIO } = require("../socket");
+
 
 exports.sendMessage = async (req, res) => {
     const { receiverId, content } = req.body;
@@ -23,11 +25,15 @@ exports.sendMessage = async (req, res) => {
         content,
       },
     });
+    
+    const io = getIO();
+    io.to(`user:${receiverId}`).emit("receive_message", message);
   
     logger.info(`Message sent from ${req.userId} to ${receiverId}`);
   
     res.status(201).json(message);
   };
+  
   
 exports.getConversation = async (req, res) => {
   const otherUserId = parseInt(req.params.userId);
